@@ -10,27 +10,31 @@ module.exports = function(config) {
 
     // frameworks to use
     // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
-    frameworks: ['mocha', 'chai'],
+    // frameworks: ['mocha', 'chai'],
+    frameworks: ['jasmine'],
 
     // list of files / patterns to load in the browser
     files: [
       // angular source code
       'node_modules/angular/angular.js',
-      // 'node_modules/ngstorage/ngStorage.js',
-      // 'node_modules/angular-sanitize/angular-sanitize.js',
-      // 'node_modules/angular-ui-router/angular-ui-router.js',
-
       'node_modules/angular-mocks/angular-mocks.js',
+      'node_modules/ngstorage/ngStorage.js',
+      'node_modules/angular-sanitize/angular-sanitize.js',
+
+      'node_modules/angular-ui-router/angular-ui-router.js',
 
       // our application code
       // Wildcards will not work here, as it defaults to alphabetical order
       'compiled/client/routes.js',
       'compiled/client/controllers/controller.js',
+      'compiled/client/services/services.js',
+      'compiled/tests/client/serviceGreeter.js',
 
       // example file
       // 'src/tests/client/example.js',
 
       // spec files
+      'src/tests/client/serviceGreeter.spec.js',
       'src/tests/client/controller.js'
     ],
 
