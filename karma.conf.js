@@ -23,6 +23,7 @@ module.exports = function(config) {
       'node_modules/angular-mocks/angular-mocks.js',
 
       // our application code
+      // Wildcards will not work here, as it defaults to alphabetical order
       'compiled/client/routes.js',
       'compiled/client/controllers/controller.js',
 
