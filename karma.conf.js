@@ -31,7 +31,7 @@ module.exports = function(config) {
       'compiled/tests/client/serviceGreeter.js',
 
       // example file
-      // 'src/tests/client/example.js',
+      'src/tests/client/example.js',
 
       // spec files
       'src/tests/client/serviceGreeter.spec.js',

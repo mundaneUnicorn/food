@@ -167,7 +167,7 @@ app.factory('RestaurantAndRoute', ['$http', function($http) {
     // *******************TEST FUNCTION***********************
     getGreeting: function(name) {
       return "Hello " + name;
-    };
+    }
 
   }
 }])
