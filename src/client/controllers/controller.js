@@ -53,41 +53,6 @@ app.controller('inputsController', ['$scope', '$http', '$state', '$sce', 'Restau
         }).catch(err => {
           console.log('Error submitting: ', err);
         })
-
-
-
-
-
-        // // POST start & end locations to server
-        // // server *should* return directions and list of restaurants
-        // $http({
-        //   method: 'POST',
-        //   url: '/maps/submit',
-        //   headers: {
-        //     'Content-Type': 'application/json'
-        //   },
-        //   data: {
-        //     start: $scope.start,
-        //     end: $scope.end
-        //   }
-        // }).then((response) => {
-
-        //   var results = response.data.route;
-        //   var route = response.data.route[0];
-        //   var list = response.data.restaurants;
-        //   console.log('Returned route: ', route);
-        //   console.log('Returned restaurant: ', list);
-
-        //   // reset the directions upon new search
-        //   $scope.directions = '';
-
-        //   // write out the steps from start to end
-        //   results[0].legs[0].steps.forEach((step => {
-        //     $scope.directions += step['html_instructions'] + '<br>';
-        //   }));
-        // }).catch((err) => {
-        //   console.log('Error submitting: ', err);
-        // })
       }
     };
   }
