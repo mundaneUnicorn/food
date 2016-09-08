@@ -92,7 +92,7 @@ app.factory('RestaurantAndRoute', ['$http', function($http) {
         markers.push(marker);
 
         //Display an info window when marker is clicked
-        let infoWindow = Window(place);
+        let infoWindow = createInfoWindow(place);
         marker.addListener('click', () => {
           //close open info windows
           openInfoWindows.forEach((infoWin) => {
