@@ -5,7 +5,7 @@
       <th align='center'>Rating</th>
       <th align='center'>Address</th>
     </tr>
-    <tr ng-repeat='restaurant in restaurants'>
+    <tr ng-repeat='restaurant in restaurants' ng-click='showInfoWindow(restaurant)'>
       <td class='restaurant'>{{restaurant.name}}</td>
       <td class='rating' align='center'>{{restaurant.rating}}</td>
       <td class='address' align='center'>{{restaurant.location.address[0]}}

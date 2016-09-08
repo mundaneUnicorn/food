@@ -10,7 +10,7 @@ app.controller('inputsController', ['$scope', '$http', '$state', '$sce', 'Restau
 
     $scope.start; // start location input
     $scope.end; // end location input
-
+    $scope.map; //store map
     $scope.directions = ''; // directions from start to end
 
     $scope.logout = () => {
@@ -40,6 +40,7 @@ app.controller('inputsController', ['$scope', '$http', '$state', '$sce', 'Restau
             map = new google.maps.Map(document.getElementById('map'), {
               zoom: 14
             })
+            $scope.map = map;
             // Associate the route with our current map
             directionsDisplay.setMap(map);
             //clear existing markers
@@ -54,6 +55,11 @@ app.controller('inputsController', ['$scope', '$http', '$state', '$sce', 'Restau
           console.log('Error submitting: ', err);
         })
       }
+    };
+
+    //Shows the appropriate restaurant info window on the map when clicked in the list
+    $scope.showInfoWindow = (restaurant) => {
+      RestaurantAndRoute.openInfoWindow($scope.map, restaurant.name);
     };
   }
 

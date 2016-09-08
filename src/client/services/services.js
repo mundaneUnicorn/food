@@ -2,6 +2,7 @@ app.factory('RestaurantAndRoute', ['$http', function($http) {
 
   var restaurants = [];
   var markers = [];
+  var infoWindows = [];
   var openInfoWindows = [];
 
   //Creates an info window for a marker
@@ -33,6 +34,9 @@ app.factory('RestaurantAndRoute', ['$http', function($http) {
       content: displayHTML
     });
 
+    //store info window
+    infoWindows.push(infoWindow);
+    
     return infoWindow;
   };
 
@@ -137,6 +141,27 @@ app.factory('RestaurantAndRoute', ['$http', function($http) {
           window.alert('Directions request failed due to ' + status);
         }
       });
+    },
+
+    /**
+     * Input: (Map Object, String)
+     * Output: Undefined
+     * Description: Opens the info window for a given restaurant
+     */
+    openInfoWindow: (map, name) => {
+      //find matching restaurant
+      let markerIndex;
+      restaurants.forEach((restaurant, index) => {
+        //record index where found
+        if (name === restaurant.name) {
+          markerIndex = index;
+        }
+      });
+
+      //record info window as open
+      openInfoWindows.push(infoWindows[markerIndex]);
+      //open info window
+      infoWindows[markerIndex].open(map, markers[markerIndex]);
     }
 
   }
