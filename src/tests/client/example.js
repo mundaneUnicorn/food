@@ -8,7 +8,7 @@ describe('Examples', function() {
     it('should be a string', function() {
 
       //Check type
-      var foo = 'example';
+      var foo = {};
       expect(foo).to.be.a('string');
     });
 
