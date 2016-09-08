@@ -21,13 +21,13 @@ module.exports = function(config) {
       'node_modules/angular-mocks/angular-mocks.js',
 
       // our application code
-      'src/client/**/*.js',
+      // 'src/client/**/*.js',
 
       // example file
       'src/tests/client/example.js',
 
       // spec files
-      'src/tests/client/controller.js'
+      // 'src/tests/client/controller.js'
     ],
 
 
@@ -62,7 +62,7 @@ module.exports = function(config) {
 
 
     // enable / disable watching file and executing tests whenever any file changes
-    autoWatch: true,
+    autoWatch: false,
 
 
     // start these browsers
@@ -72,7 +72,7 @@ module.exports = function(config) {
 
     // Continuous Integration mode
     // if true, Karma captures browsers, runs the tests and exits
-    singleRun: false,
+    singleRun: true,
 
     // Concurrency level
     // how many browser should be started simultaneous
