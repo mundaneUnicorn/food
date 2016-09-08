@@ -9,14 +9,14 @@ describe('Examples', function() {
 
       //Check type
       var foo = 15;
-      expect(foo).toEqual(jasmine.any(Number));
+      expect(foo).to.eql(15);
     });
 
     it('should equal some value', function() {
 
       //Check equality
       var foo = 'bar';
-      expect(foo).toEqual('bar');
+      expect(foo).to.equal('bar');
     });
   });
 });

@@ -10,8 +10,8 @@ module.exports = function(config) {
 
     // frameworks to use
     // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
-    // frameworks: ['mocha', 'chai'],
-    frameworks: ['jasmine'],
+    frameworks: ['mocha', 'chai'],
+    // frameworks: ['jasmine'],
 
     // list of files / patterns to load in the browser
     files: [
@@ -21,7 +21,7 @@ module.exports = function(config) {
       'node_modules/ngstorage/ngStorage.js',
       'node_modules/angular-sanitize/angular-sanitize.js',
 
-      'node_modules/angular-ui-router/angular-ui-router.js',
+      'node_modules/angular-ui-router/release/angular-ui-router.js',
 
       // our application code
       // Wildcards will not work here, as it defaults to alphabetical order
@@ -34,8 +34,9 @@ module.exports = function(config) {
       'src/tests/client/example.js',
 
       // spec files
+      'src/tests/client/services.spec.js',
       'src/tests/client/serviceGreeter.spec.js',
-      'src/tests/client/controller.js'
+      'src/tests/client/controller.spec.js'
     ],
 
 

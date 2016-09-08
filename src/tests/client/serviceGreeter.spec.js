@@ -6,6 +6,6 @@ describe("getGreeting", function() {
   }));
 
   it("says Hello to me", function() {
-    expect(greeter.getGreeting("Dave")).toEqual("Hello Dave");
+    expect(greeter.getGreeting("Dave")).to.equal("Hello Dave");
   });
 });
