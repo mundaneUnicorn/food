@@ -16,17 +16,21 @@ module.exports = function(config) {
     files: [
       // angular source code
       'node_modules/angular/angular.js',
-      'node_modules/angular-ui-router/angular-ui-router.js',
+      // 'node_modules/ngstorage/ngStorage.js',
+      // 'node_modules/angular-sanitize/angular-sanitize.js',
+      // 'node_modules/angular-ui-router/angular-ui-router.js',
+
       'node_modules/angular-mocks/angular-mocks.js',
 
       // our application code
-      // 'src/client/**/*.js',
+      'compiled/client/routes.js',
+      'compiled/client/controllers/controller.js',
 
       // example file
-      'src/tests/client/example.js',
+      // 'src/tests/client/example.js',
 
       // spec files
-      // 'src/tests/client/controller.js'
+      'src/tests/client/controller.js'
     ],
 
 
@@ -68,7 +72,7 @@ module.exports = function(config) {
 
     // start these browsers
     // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
-    
+
     browsers: ['PhantomJS'],
 
 
