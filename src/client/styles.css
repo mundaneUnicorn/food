@@ -50,7 +50,7 @@ table {
 /************************ End of Reset **************************/
 
 html, body {
-	color: #E6EBE0;
+	color: #black;
   background-color: #5CA4A9;
   height: 100%;
   font-family: 'Lucida Sans Unicode', 'Lucida Grande', sans-serif;
@@ -62,7 +62,8 @@ html, body {
   margin: none;
   font-family: 'Lucida Sans Unicode', 'Lucida Grande', sans-serif;
   font-size: 0.7em;
-  background-color: #F4F1BB;
+  color: #E6EBE0;
+  background-color: #ED6A5A;
 }
 
 tr th {
@@ -80,7 +81,7 @@ td {
 }
 
 .restaurantRow:hover {
-  background-color: #ED6A5A;
+  background-color: #5CA4A9;
   cursor: pointer;
 }
 
@@ -194,6 +195,7 @@ td {
 .rightSide {
   float: right;
   text-align: right;
+  color: black;
 }
 
 .rightSide span {
@@ -234,6 +236,7 @@ td {
   padding: 10px 0px;
   font-size: 3.8em;
   font-weight: bold;
+  color: black;
 }
 
 .header {
@@ -314,11 +317,12 @@ td {
   display: inline-block;
   margin: 0;
 	border: 2px solid #fff;
-  padding: 10px 30px;
+  padding: 4px 20px;
 	background-color: transparent;
 }
 
 .btn:hover {
 	color: #5CA4A9;
 	background-color: #fff;
+  cursor: pointer;
 }
