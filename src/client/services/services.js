@@ -17,7 +17,7 @@ app.factory('RestaurantAndRoute', ['$http', '$localStorage', function($http, $lo
     let displayHTML = `
       <div class="infoWindow">
         <div>
-          <h2 class="infoName">${place.name}</h2>
+          <h4 class="infoName">${place.name}</h4>
 
         </div>
         <div>
@@ -39,7 +39,9 @@ app.factory('RestaurantAndRoute', ['$http', '$localStorage', function($http, $lo
 
     //create info window
     let infoWindow = new google.maps.InfoWindow({
-      content: displayHTML
+      content: displayHTML, 
+      maxWidth: 150, 
+      maxHeight: 150
     });
 
     //store info window
@@ -57,9 +59,10 @@ app.factory('RestaurantAndRoute', ['$http', '$localStorage', function($http, $lo
     openInfoWindows = [];
   };
 
+
   return {
 
-    fetchRestaurants: function(origin, destination, mode) {
+    fetchRestaurants: function(routes, totalDistance) {
       // clear out the array for the new batch of restaurants
       restaurants = [];
 
@@ -71,14 +74,11 @@ app.factory('RestaurantAndRoute', ['$http', '$localStorage', function($http, $lo
           'Content-Type': 'application/json'
         },
         data: {
-          start: origin,
-          end: destination,
-          mode: mode,
-          user: $localStorage.username,
-
+          routesArray: routes,
+          totalDistance: totalDistance,
+          user: $localStorage.username
         }
       }).then(data => {
-
         // filter out any restaurants farther than 60m
         /*** This isn't filtering by distance anymore ***/
         restaurants = data.data.restaurants.filter(restaurant => {
@@ -92,6 +92,37 @@ app.factory('RestaurantAndRoute', ['$http', '$localStorage', function($http, $lo
         console.log('Error fetching restaurants: ', err);
       })
     },
+
+    checkRoute: function(stopsList,mode){
+      var waypts = [];
+
+      for (var i = 1; i < stopsList.length-1; i++) {
+          waypts.push(stopsList[i].name);
+      }
+
+
+      // request the restaurants from the server
+      return $http({
+        method: 'POST',
+        url: '/checkRoute',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        data: {
+          start: stopsList[0].name,
+          end: stopsList[stopsList.length-1].name,
+          mode: mode,
+          stops: waypts,
+          user: $localStorage.username,
+        }
+      }).then(function(results){
+        return results
+      }).catch(function(err){
+        return "Payment Required"
+      })
+
+    },
+
 
     getRestaurants: function() {
       return restaurants;
@@ -145,10 +176,21 @@ app.factory('RestaurantAndRoute', ['$http', '$localStorage', function($http, $lo
       Output: null
       Description: Renders a route to the map with the given start and end points.
     */
-    calculateAndDisplayRoute: (directionsService, directionsDisplay, start, end, mode) => {
+    calculateAndDisplayRoute: (directionsService, directionsDisplay, start, end, mode, stops) => {
+      var waypts = [];
+
+      for (var i = 1; i < stops.length-1; i++) {
+          waypts.push({
+            location: stops[i].name,
+            stopover: true
+          });
+      }
+
+
       directionsService.route({
         origin: start,
         destination: end,
+        waypoints: waypts,
         travelMode: mode.toUpperCase(),
       }, function(response, status) {
         if (status === 'OK') {
@@ -187,6 +229,54 @@ app.factory('RestaurantAndRoute', ['$http', '$localStorage', function($http, $lo
       markers = [];
       infoWindows = [];
       openInfoWindows = [];
+    }, 
+
+    submitFavorites: (email) => {
+      var userFavList = $('<ul>');
+      userFavList.append($(':checked').closest('.entry')).find('input').remove();
+      userFavList.find('.entry').append($('<br>')).append($('<br>'));
+
+      console.log($(':checked').closest('.entry'));
+      console.log("userfavlist is", userFavList);
+
+      return $http({
+        method: 'POST',
+        url: '/favorites',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        converters: {
+          'text json': true
+        },
+        data: {
+          userEmail: email,  
+          favsHtml: userFavList.html()
+        }
+      }).then(function(results){
+        return results;
+      }).catch(function(err){
+        return "Payment Required"
+      })
+
+
+      console.log(userFavList);
     }
   }
-}])
+}]);
+
+app.factory('PageTransitions', function(){
+  return {
+    showBackground: function() {
+      $('body').css('background-image', 'url("FoodTrip.png")');
+    },
+    hideBackground: function() {
+      $('body').css('background-image', 'none');
+    },
+    transNavOn: function() {
+      $('nav').toggleClass('transparent', true );
+    },
+    transNavOff: function() {
+      $('nav').toggleClass('transparent', false);
+    }
+  }
+});

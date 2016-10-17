@@ -1,4 +1,4 @@
-app.controller('optionsController', ['$http', '$scope', '$localStorage', 'Auth', '$state', function($http, $scope, $localStorage, Auth, $state) {
+app.controller('optionsController', ['$http', '$scope', '$localStorage', '$state', function($http, $scope, $localStorage, $state) {
 
   // a collection of user submitted preferences
   $scope.tags = [];

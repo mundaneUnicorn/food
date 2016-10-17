@@ -7,6 +7,9 @@ Utilizes the MEAN stack.
 ## Installation
 
 npm install  
+TO READY FOR DEPLOYMENT: Delete --watch from package.json line 9, add "node run compile && " to "start script", 
+and remove "key.js" from .gitignore
+
 
 ## Running the Server
 

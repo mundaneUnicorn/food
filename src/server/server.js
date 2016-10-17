@@ -5,9 +5,10 @@ var mongoose = require('mongoose');
 mongoose.Promise = require('bluebird');
 var session = require('express-session');
 var handlers = require('./handlers.js');
+var keys = require('./keys.js')
 
 // open connection to MongoDB database
-mongoose.connect('mongodb://localhost/foodfood');
+mongoose.connect(keys.MONGOLAB_URI);
 
 var app = express();
 
@@ -27,6 +28,11 @@ app.post('/login', handlers.login);
 app.post('/signup', handlers.signup);
 app.post('/options', handlers.saveOptions); // saves user prefs
 app.post('/addresses', handlers.saveAddress); //save an address
+app.post('/chargeCard', handlers.chargeCard);
+app.post('/checkRoute', handlers.getRoutes);
+app.post('/favorites', handlers.emailFavoritesList);
 
-app.listen(8000);
-console.log('Now listening on 127.0.0.1:8000')
+app.listen(process.env.PORT || 8000);
+console.log('Now listening on 127.0.0.1:8000') 
+
+

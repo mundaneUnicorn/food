@@ -1,74 +1,25 @@
-<div ng-controller='inputsController'>
-
+<div ng-controller='inputsController' class="container fill">
 <!-- - - - -HEADER- - - - -->
-  <div class='header'>
-  
-    <div class='inline'>
-      <h1>foodcrawl</h1>
-    </div>
-
-<!-- Show login option for users who want to login -->
-    <div class='inline rightSide' ng-hide='activeUser || newUser'>
-      <div ui-view='login'></div>
-    </div>
-
+    <!-- <div class='header'> -->
 <!-- Show logout option for logged in users -->
-    <div class='inline rightSide' ng-show='activeUser && !newUser'>
+    <!-- <div class='inline rightSide' ng-show='activeUser && !newUser'> -->
+<!--     <div>
       <span class='bold'>{{user}}</span>
       <button ng-click='logout()' class='btn'>Log out</button>
     </div>
-
-<!-- Show sign-up for creating new account -->
-    <div class='inline rightSide' ng-show='newUser'>
-      <div ui-view='signup'></div>
-    </div>
-
-  </div>
+  </div> -->
 <!-- - - - - -END OF HEADER- - - - -  -->
 
 
 <!-- - - - -Start and End for user input- - - - -->
-  <form id='routeSearch' name='routeForm' ng-submit='submit(routeForm)'>
-    <span class='startEnd'>Start </span><input class='textInput' name='start' type='text' ng-model='start' required placeholder='944 Market Street'/>
-    <span class='startEnd'>End </span><input class='textInput' name='end' type='text' ng-model='end' required placeholder='510 Stevenson Street'/>
-    <select ng-model='mode'>
-      <option value='walking'>Walking</option>
-      <option value='driving'>Driving</option>
-      <option value='bicycling'>Bicycling</option>
-    </select>
-    <input type='submit' class='btn'/>
-  </form>
-
-
-<!-- - - - -Filters and Addresses OPTIONS BAR- - - - -->
-  <div id='optionsBar'>
-
-    <span class='hoverClick inline' ng-mouseenter='displayOptions()'>Filters </span>
-    <span class='hoverClick inline' ng-mouseenter='displayAddresses()'>Addresses</span>
-    <span id='filter' class='invalid small' ng-show='invalidOptions'>Log in to customize filters!</span>
-    <span id='addresses' class='invalid small' ng-show='invalidAddresses'>Log in to save addresses!</span>
-    
-  <!-- - - - -Filters- - - - -->
-    <div id='optionsContainer' ng-show='showOptions'>
-      <div ui-view='options'></div>
-    </div>
-  <!-- - - - -ADDRESSES- - - - -->
-    <div id='addressesContainer' ng-show='showAddresses'>
-      <div ui-view='addresses'></div>
-    </div>
-
-  </div>
-
-<!-- - - - -Restaurant list and map- - - - -->
-  <div id='restaurantAndMap'>
-    <div class='inline' id='restaurantDiv'>
-      <div ui-view='restaurantList'>
+  <div id="mapAndListContainer" class="row section flex-s">
+    <div class="col s12 l6" id='restaurantDiv'>
+      <div ui-view='restaurantList' id="resList">
       </div>
     </div>
-    <div class='inline' id='mapContainer'>
-        <div id='map'>
-        </div>
+    <div class="col s12 l6 mapcontainer">
+      <div id='map'>
+      </div>
     </div>
   </div>
-
 </div>

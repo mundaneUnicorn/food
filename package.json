@@ -7,7 +7,10 @@
     "test": "mocha compiled/tests --timeout 5000 && karma start",
     "compile": "babel src --out-dir compiled --presets=es2015 --source-maps inline --copy-files --watch",
     "rebase": "git pull --rebase upstream master && git push origin master",
-    "start": "nodemon compiled/server/server.js"
+    "start": "node compiled/server/server.js"
+  },
+  "engines": {
+    "node": "6.3.1"
   },
   "repository": {
     "type": "git",
@@ -25,18 +28,24 @@
     "angular-ui-router": "^0.3.1",
     "babel-cli": "^6.14.0",
     "babel-preset-es2015": "^6.14.0",
+    "bcrypt": "^0.8.7",
     "bluebird": "^3.4.5",
     "body-parser": "^1.15.2",
     "chai": "^3.5.0",
     "express": "^4.14.0",
     "express-session": "^1.14.1",
+    "geolib": "^2.0.21",
     "jquery": "^3.1.0",
     "lodash": "^4.15.0",
     "mocha": "^3.0.2",
     "mongoose": "^4.5.10",
     "ngstorage": "^0.3.11",
+    "nodemailer": "^2.6.0",
+    "nodemon": "^1.10.2",
     "path": "^0.12.7",
+    "polyline": "^0.2.0",
     "request": "^2.74.0",
+    "stripe": "^4.10.0",
     "supertest": "^2.0.0",
     "ui-router": "^1.0.0-alpha.3",
     "yelp": "^1.0.1"

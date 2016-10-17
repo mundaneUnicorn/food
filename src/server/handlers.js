@@ -9,6 +9,11 @@ var _ = require('lodash');
 var User = require('./dbconfig/schema.js').User;
 var Address = require('./dbconfig/schema.js').Address;
 var bcrypt = require('bcrypt');
+var polyline = require('polyline');
+var geolib = require('geolib');
+var stripe = require("stripe")("sk_test_xg4PkTku227mE5Pub1jJvIj5");
+var https = require('https');
+var nodemailer = require('nodemailer');
 
 const gmapsURL = 'https://maps.googleapis.com/maps/api/directions/json';
 
@@ -19,7 +24,11 @@ var yelp = new Yelp({
   'token_secret': keys.yelpTokenSecret
 });
 
+var lastSearch;
+
+
 module.exports = {
+
   login: (req, res, next) => {
     var username = req.body.username;
     var password = req.body.password;
@@ -32,7 +41,7 @@ module.exports = {
         // Checks the hashed password in the database against the password
         // attached to the request body.
         bcrypt.compare(password, user.password, function (error, result) {
-          
+
           if (error) {
             // Conditional to catch any errors the bcrypt module throws.
             console.log(error);
@@ -75,8 +84,8 @@ module.exports = {
     var username = req.body.username;
     var prefs = req.body.userPrefs;
     User.findOneAndUpdate({username: username},
-                          {$set: {preferences: prefs}}, 
-                          {new: true}, 
+                          {$set: {preferences: prefs}},
+                          {new: true},
                           (err, result) => {
       if (err) {
         res.send({message: 'Error updating preferences.', valid: false});
@@ -98,57 +107,91 @@ module.exports = {
 
 
   /*
-   * Input: (String, String, Function) 
+   * Input: (String, String, Function)
    * Output: Promise
    * Description: Given a starting and ending address, gives an object
    *              containing an array of routes in promise form.
    */
-  getRoutes: function (origin, destination, mode) {
-
+  getRoutes: function (req, res, next) {
     // Concatenate query parameters into HTTP request friendly string.
     let queryString = qs.stringify({
-      origin: origin,
-      destination: destination,
+      origin: req.body.start,
+      destination: req.body.end,
+      waypoints: req.body.stops || null,
+      optimizeWaypoints: true,
       key: keys.googleMaps,
-      mode: mode,
+      mode: req.body.mode,
     });
 
     // Specify parameters for request.
     let options = {
       url: `${gmapsURL}?${queryString}`,
       method: 'GET'
-    }; 
- 
+    };
+
+
     // Make request to Google Directions API.
-    return request(options);
+    request(options).then(function (results){
+      var routesArray = JSON.parse(results.body).routes;
+
+      var totalRouteDistance = 0;
+      routesArray[0].legs.forEach(function (leg) {
+        totalRouteDistance += leg.distance.value;
+      });
+      console.log(totalRouteDistance,"Total Route Distance")
+      lastSearch = {
+        routesArray: routesArray,
+        totalRouteDistance: totalRouteDistance
+      }
+      if (totalRouteDistance > 804672){
+        res.status(401).end()
+      } else {
+        res.status(201).end()
+      }
+
+    })
+
   },
 
   // Takes form data from submit
   // Outputs routes or addresses for the map
-  submit: function(req, res, next) {
-    module.exports.getRoutes(req.body.start, req.body.end, req.body.mode)
-    .then(results => {
-      // Parse nested object returned by Google's API to
-      // specifically get Array of routes.
-      var routesArray = JSON.parse(results.body).routes;
 
+  submit: function(req, res, next) {
       User.findOne({
         username: req.body.user,
       }).then(function (response) {
-
         // Call getRestaurants along the returned route.
-        module.exports.getRestaurants(req, res, routesArray, response.preferences);
+
+        if (!response){
+          module.exports.getRestaurants(res,req.body.routesArray, req.body.totalRouteDistance);
+        } else {
+          module.exports.getRestaurants(res, req.body.routesArray, req.body.totalRouteDistance, response.preferences);
+        }
 
       }).catch(function (error) {
-        
+        console.log(error,"server side error")
         // Call getRestaurants along the returned route.
-        module.exports.getRestaurants(req, res, routesArray);
+        module.exports.getRestaurants(res,req.body.routesArray, req.body.totalRouteDistance);
 
       });
-    })
-    .catch(err => {
-      console.log('Error requesting routes: ', err);
-      res.end();
+
+
+  },
+
+  chargeCard: (req,res) => {
+    var token = req.body.stripeToken; // Using Express
+
+    var charge = stripe.charges.create({
+      amount: 1000, // Amount in cents
+      currency: "usd",
+      source: token,
+      description: "Example charge"
+    }, function(err, charge) {
+      if (err && err.type === 'StripeCardError') {
+        res.status(400)
+      } else {
+        res.status(201).send("Charge succesful")
+      }
     });
   },
 
@@ -158,85 +201,57 @@ module.exports = {
    * Description: Takes in the route object returned by Google's API,
    *              and returns an array of restaurant objects from Yelp.
    */
-  getRestaurants: (req, res, routesArray, preferences) => {
+  getRestaurants: (res, preferences) => {
     preferences = preferences || [];
 
-    // Object to be returned to the client. 
+    // Object to be returned to the client.
     // Stores route and restaurants in two seperate arrays.
     var responseObject = {
-      route: routesArray,
+      route: lastSearch.routesArray,
       restaurants: [],
     };
 
-    // Stores the segments along a route for querying Yelp.
-    var segmentsArray = [];
+    // // Use a different radius for longer routes.     //num prev 7500
+    var yelpSearchRadius = lastSearch.totalRouteDistance > 150000 ? 7500 :
+                              lastSearch.totalRouteDistance > 8750 ? lastSearch.totalRouteDistance / 50 : 175;
 
-    // Stores all of the Google defined "steps" along a route.
-    var steps = [];
+    // Use these. They are auto-distributed with a bias towards population centers.
+    var latLngPairs = polyline.decode(lastSearch.routesArray[0].overview_polyline.points);
 
-    // Determine the total length of a route in meters.
-    var totalRouteDistance = 0;
-    routesArray[0].legs.forEach(function (leg) {
-      totalRouteDistance += leg.distance.value;
-      steps = steps.concat(leg.steps);
-    });
+    var shouldUseHalfDistance = true;
+    var minSeparationForQueries = yelpSearchRadius / 2;
+    var currentPoint = latLngPairs[0];
+    var queryTargets = [];
 
-    // Calculates the length of the segments produced by cutting a given route into 10ths.
-    var averageSegmentLength = totalRouteDistance / 10;
+    // Loop through the lat lng pairs that make up the total root and select points that
+    // will provide yelp queries that are spread out evenly along the route, without multiple
+    // queries falling within overlapping search radii, since these produce redundant results.
+    for ( var i = 1; i < latLngPairs.length; i++ ){
+      if ( geolib.getDistance(currentPoint, latLngPairs[i]) >= minSeparationForQueries ){
+        queryTargets.push(latLngPairs[i]);
+        currentPoint = latLngPairs[i];
 
-  // Breaks down all of Google's given 'steps' into 10 uniform segments of equal length.
-    var start, end;
-    var distanceFromTarget = averageSegmentLength / 2;
-    
-    // Iterate over each step along a route.
-    for (var i = 0; i < steps.length; i++) {
-
-      // Check if a segment's target midpoint lies along a given step.
-      if (steps[i].distance.value >= distanceFromTarget) {
-        
-        // Grab the step's start and stop coordinates.
-        start = steps[i].start_location;
-        end = steps[i].end_location;
-
-        // Calculate the midpoint of the given segment using MATH!
-        var midpoint = {
-          lat: start.lat + ((end.lat - start.lat) * (distanceFromTarget / steps[i].distance.value)),
-          lng: start.lng + ((end.lng - start.lng) * (distanceFromTarget / steps[i].distance.value)),
-        };
-        
-        // Generate the appropriate segment object and add it to the storage array.
-        segmentsArray.push({
-          distance: averageSegmentLength,
-          midpoint: midpoint,
-        });
-
-        // Chop off the beginning of a given step that has already been evaluated.
-        steps[i].start_location = midpoint;
-        steps[i].distance.value -= distanceFromTarget;
-        distanceFromTarget = averageSegmentLength;
-        i--;
-      } else {
-
-        // If the step doesn't contain the midpoint for a segment,
-        // move on to the next step and decrease the remaining distance from target
-        // by the step's distance.
-        distanceFromTarget -= steps[i].distance.value;
+        // Only the first query needs to be set to the half radius. Once this has started, move the
+        // separation to a yelpSearchDiameter.
+        if ( shouldUseHalfDistance ) {
+          minSeparationForQueries = yelpSearchRadius;
+          shouldUseHalfDistance = false;
+        }
       }
     }
-
 
     // Keeps track of the number of Yelp queries we've made.
     var queryCounter = 0;
     var validBusinesses;
     var searchParameters;
 
-    // Makes a unique Yelp query for each step along the given route.
-    segmentsArray.forEach(function (step, index) {
-      // console.log(step);
+    // Makes a unique Yelp query for each target along the given route.
+    queryTargets.forEach(function (target, index) {
+
       // Establish parameters for each individual yelp query.
       searchParameters = {
-        'radius_filter': Math.min(Math.max(step.distance, 100), 39999),
-        'll': `${step.midpoint.lat},${step.midpoint.lng}`,
+        'radius_filter': yelpSearchRadius,
+        'll': `${target[0]},${target[1]}`,
         'accuracy': 100,
         'category_filter': 'restaurants',
         'term': preferences.join('_') + '_restaurants'
@@ -244,10 +259,9 @@ module.exports = {
 
       // Query Yelp's API.
       yelp.search(searchParameters)
-        
+
         // Sucess callback
         .then(function (searchResults) {
-
           // Filter out businesses returned by yelp that are in weird locations.
           validBusinesses = searchResults.businesses.filter(function (item) {
 
@@ -257,26 +271,25 @@ module.exports = {
 
             } else {
 
-              // Calculate the how far away the business is.
-              var latDifference = step.midpoint.lat - item.location.coordinate.latitude;
-              var lngDifference = step.midpoint.lng - item.location.coordinate.longitude;
+              //Calculate the how far away the business is.
+              var latDifference = target[0] - item.location.coordinate.latitude;
+              var lngDifference = target[1] - item.location.coordinate.longitude;
               var totalDegreeDifference = Math.sqrt(Math.pow(latDifference, 2) + Math.pow(lngDifference, 2));
               var totalDistance = totalDegreeDifference / 0.000008998719243599958;
 
               // Compare the distrance from the business agains the upper limit,
-              // and filter accordingly.
-              return totalDistance < Math.max(step.distance / 2, 100);
+              // and filter accordingly, with a larger number used to filter for longer trips.
+              return totalDistance <= yelpSearchRadius;
             }
           });
-          
+
           // Add the returned businessees to the restauraunts array.
           responseObject.restaurants = responseObject.restaurants.concat(validBusinesses);
           responseObject.restaurants = _.uniqBy(responseObject.restaurants, 'id');
-
           // Send a response to the client if all requisite queries have been made.
           queryCounter++;
-          queryCounter >= segmentsArray.length ? res.send(responseObject) : null;
-        }) 
+          queryCounter >= queryTargets.length ? res.send(responseObject) : null;
+        })
 
         // Error callback
         .catch(function (error) {
@@ -284,7 +297,7 @@ module.exports = {
 
           // Send a response to the client if all requisite queries have been made.
           queryCounter++;
-          queryCounter >= segmentsArray.length ? res.send(responseObject) : null;
+          queryCounter >= queryTargets.length ? res.send(responseObject) : null;
         });
     });
   },
@@ -343,5 +356,35 @@ module.exports = {
     .catch(error => {
       console.log('Error saving address: ', error);
     });
-  }
+  }, 
+
+  emailFavoritesList: (req, res) => {
+    
+    var transporter = nodemailer.createTransport({
+        service: 'Gmail',
+        auth: {
+            user: 'foodcrawl2016@gmail.com', // Your email id
+            pass: keys.gmailPass // Your password
+        }
+    });
+
+    var html = '<h3 style="display:block;font-size:22"> Your selections are: </h3>' + req.body.favsHtml;
+
+    var mailOptions = {
+        from: '"Food Crawl" <foodcrawl2016@gmail.com>', // sender address
+        to: req.body.userEmail,// list of receivers
+        subject: 'Welcome to Food Crawl!', // Subject line
+        html: html // You can choose to send an HTML body instead
+    };
+
+    // send mail with defined transport object
+    transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+          res.send('Error is: ' + error);
+        } else {
+          res.send('Email sent.');
+        }
+    });
+  } 
+
 };

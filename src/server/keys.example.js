@@ -5,4 +5,6 @@ module.exports = {
   yelpSecret: 'YOUR_YELP_CONSUMER_SECRET',
   yelpToken: 'YOUR_YELP_TOKEN',
   yelpTokenSecret: 'YOUR_YELP_TOKEN_SECRET',
+  gmailPass: 'YOUR_GMAIL_PASSWORD', 
+  MONGOLAB_URI: "YOUR_MONGODB_URI"
 };

@@ -2,27 +2,47 @@
 <html ng-app='foodfood'>
 <head>
   <title>FoodFood</title>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <!-- Materialize CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/css/materialize.css">
   <link rel="stylesheet" type="text/css" href="styles.css">
-  <link href="https://fonts.googleapis.com/css?family=Modak" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
-  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCy59si896-sFy6G4Fs2vFifk2dBwRIhkY"></script>
+
+<!--   <link href="https://fonts.googleapis.com/css?family=Modak" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet"> -->
+ <link href="https://fonts.googleapis.com/css?family=Titillium+Web:200,300,400,600,700" rel="stylesheet">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+</head>
+<body ng-controller="home" class="start">
+  <div ui-view class="fill">
+  </div>
+  <!-- jQuery -->
+  <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+  <!-- Materialize Javascript -->
+  <script src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyCy59si896-sFy6G4Fs2vFifk2dBwRIhkY"></script>
+  <script src="https://checkout.stripe.com/checkout.js"></script>
   <script src="lib/angular/angular.js"></script>
   <script src="lib/angular-ui-router/release/angular-ui-router.js"></script>
   <script src="lib/ngstorage/ngStorage.js"></script>
+  <script src="ngAutocomplete.js"></script>
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/js/materialize.js"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular-materialize/0.2.1/angular-materialize.min.js"></script>
+
   <script src="routes.js"></script>
   <script src="services/services.js"></script>
-  <script src="services/authStorage.js"></script>
   <script src="services/addresses.js"></script>
-  <script src="controllers/login.js"></script>
-  <script src="controllers/signup.js"></script>
+  <script src="controllers/start.js"></script>
+  <script src="controllers/auth.js"></script>
+  <script src="controllers/home.js"></script>
   <script src="controllers/addressesCtrl.js"></script>
   <script src="controllers/options.js"></script>
   <script src="controllers/controller.js"></script>
-</head>
-<body>
+  <script type="text/javascript">
+    $(window).load(function() {
 
-  <div ui-view>
-  </div>
-
+    })
+  </script>
 </body>
 </html>

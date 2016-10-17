@@ -1,0 +1,24 @@
+<div class="fill">
+<nav class="transparent">
+  <div class="nav-wrapper">
+    <div class="container">
+      <a href="#!" class="brand-logo center">FOODTRIP</a>
+      <a href="#" data-activates="mobile-demo" class="button-collapse" data-sidenav="left" data-menuwidth="300" data-closeonclick="true"><i class="material-icons">menu</i></a>
+      <ul class="right hide-on-med-and-down">
+        <li><a href="#">{{user}}</a></li>
+        <li><a href="#" ui-sref="home.auth" ng-hide="user">Log In</a></li>
+        <li><a href="#" ng-show="user" ng-click="logout()">Log Out</a></li>
+      </ul>
+      <ul class="side-nav" id="mobile-demo">
+        <li><a href="#">{{user}}</a></li>
+        <li><a href="#" ui-sref="home.auth" ng-hide="user">Log In</a></li>
+        <li><a href="#" ng-show="user" ng-click="logout()">Log Out</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<div ui-view class="fill">
+</div>  
+
+</div>

@@ -1,0 +1,29 @@
+<div class="container">
+<!-- Show login option for users who want to login -->
+    <div class='col s12 m4' ng-hide='activeUser || newUser'>
+      <div>
+  		  <div>New User? <span  class='loginRedirectText' ng-click='showNewUserForm()'>Create an Account</span></div>
+  		</div>
+  		<div>
+  		  <form name='loginForm' ng-submit='loginSubmit(loginForm)'>
+  		    <span>Username </span><input class='textInput' ng-model='username' required/><br>
+  		    <span>Password </span><input class='textInput' ng-model='password' type='password' required/><br>
+  		    <span class='invalid' ng-show='invalid'>Invalid username or password!</span><input type='submit' value='Log in' class='btn'/>
+  		  </form>
+  		</div>
+    </div>
+
+<!-- Show sign-up for creating new account -->
+    <div class='col s12 m4' ng-show='newUser'>
+      <div>
+        <div>Have an account? <span class='loginRedirectText' ng-click='showLoginForm()'>Log in</span></div>
+      </div>
+      <div>
+        <form name='newUserForm' ng-submit='newUserSubmit(newUserForm)'>
+          <span>Username </span><input class='textInput' ng-model='usernameNew' required/><br>
+          <span>Password </span><input class='textInput' ng-model='passwordNew' type='password' required/><br>
+          <span class='invalid' ng-show='invalid'>That username already exists!</span><input type='submit' value='Sign up' class='btn'/>
+        </form>
+      </div>
+    </div>
+</div>

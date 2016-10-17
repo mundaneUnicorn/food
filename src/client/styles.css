@@ -1,440 +1,172 @@
-/* http://meyerweb.com/eric/tools/css/reset/
-   v2.0 | 20110126
-   License: none (public domain)
-*/
-
-html, body, div, span, applet, object, iframe,
-h1, h2, h3, h4, h5, h6, p, blockquote, pre,
-a, abbr, acronym, address, big, cite, code,
-del, dfn, em, img, ins, kbd, q, s, samp,
-small, strike, strong, sub, sup, tt, var,
-b, u, i, center,
-dl, dt, dd, ol, ul, li,
-fieldset, form, label, legend,
-table, caption, tbody, tfoot, thead, tr, th, td,
-article, aside, canvas, details, embed,
-figure, figcaption, footer, header, hgroup,
-menu, nav, output, ruby, section, summary,
-time, mark, audio, video {
-	margin: 0;
-	padding: 0;
-	border: 0;
-	font-size: 100%;
-	font: inherit;
-	vertical-align: baseline;
-}
-/* HTML5 display-role reset for older browsers */
-article, aside, details, figcaption, figure,
-footer, header, hgroup, menu, nav, section {
-	display: block;
-}
-body {
-	line-height: 1;
-}
-ol, ul {
-	list-style: none;
-}
-blockquote, q {
-	quotes: none;
-}
-blockquote:before, blockquote:after,
-q:before, q:after {
-	content: '';
-	content: none;
-}
-table {
-	border-collapse: collapse;
-	border-spacing: 0;
+@media (max-width: 992px) {
+  .flex-s {
+    /*display: flex;*/
+    flex-direction: column; /* Stack on top */
+  }
+  .mapcontainer: {
+    height: 300px;
+  }
+  #map: {
+    float: none;
+    height: 300px;
+  }
+  #restaurantDiv {
+    order: 2; /* Go down, bring Box B up */
+  }
 }
 
-/************************ End of Reset **************************/
+.mapcontainer {
 
-html, body {
-	color: black;
-  background-color: white;
+}
+
+.container {
   height: 100%;
-  font-family: 'Open Sans', 'Lucida Sans Unicode', 'Lucida Grande', sans-serif;
-}
-
-#restaurantTable {
-  min-width: 100%;
-  margin: none;
-  font-family: 'Open Sans', 'Lucida Sans Unicode', 'Lucida Grande', sans-serif;
-  font-size: 0.7em;
-  background-color: white;
-}
-
-tr th {
-  padding: 5px 10px;
-  font-size: 16px;
-  font-weight: bold;
-}
-
-tr th:first-child {
-  padding: 5px 20px;
-}
-
-td {
-  line-height: 15px;
-  vertical-align: middle;
-  padding: 4px 2px;
-  max-width: 160px;
-  font-size: 15px;
-  font-family: 'Open Sans';
-  font-family: 'Open Sans', 'Lucida Sans Unicode';
-}
-
-.restaurant, .rating, .addressTable {
-  border-top: 1px solid gray;
-}
-
-.restaurant {
-  width: 30%;
-  text-align: center;
-}
-
-.rating {
-  width: 15%;
-  text-align: center;
-  color: #0075C4;
-}
-
-.reviewCount {
-  width: 15%;
-  text-align: center;
-  color: #000000;
-}
-
-.restaurantRow:hover  .rating {
-  color: white;
-}
-
-.addressTable {
-  width: 55%;
-  text-align: center;
-}
-
-.restaurantRow:hover {
-  background-color: #0075C4;
-  color: white;
-  cursor: pointer;
-}
-
-#restaurantAndMap {
-  margin-top: 2px;
-  border: 1px solid #0075C4;
-  height: 800px;
-  width: 100%;
-  display: flex;
 }
 
 #restaurantDiv {
   height: 100%;
-  overflow-y: scroll;
-  min-width: 40%;
-  display: inline-block;
+  /*overflow-y: scroll;*/
 }
 
-#mapContainer {
-  height: 100%;
-  flex-basis: 100%;
-  overflow: hidden;
+
+.flex-s {
+  display: flex;
+  /*flex-direction: row;*/
 }
 
+.fill {
+  height: 100%
+}
+
+
+
+/*#mapcontainer {
+
+}
+*/
 #map {
-  width: 100%;
+      /*width: 100%;*/
+      height: 100%;
+     }
+
+.start {
+  background-image:url('FoodTrip.png');
+  background-size: cover;
+  background-repeat:no-repeat;
+  z-index:-10;
+}
+
+
+html {
+  height: 100%;
+
+  font-family: 'Titillium Web', sans-serif;
+}
+
+body {
   height: 100%;
 }
+
+.brand-logo {
+  font-family:'Titillium Web', sans-serif;
+  font-weight:700;
+  font-size:36px;
+  color:white;
+ /* opacity:.95;*/
+}
+
+.material-icons {
+  opacity:.9;
+}
+
 
 #routeSearch {
-  margin: 10px 0 10px 10px;
+ width:80%;
+ margin: 0 auto;
 }
 
-#loginDiv h1, #signupDiv h1 {
-  background-color: #e3e3e3;
-  padding: 15px 12px;
-  margin: 0px;
-  border-left: 15px solid #bababa;
-  font-family: 'Open Sans', 'Lucida Sans Unicode', 'Lucida Grande', sans-serif;
-  font-weight: bold;
+form label {
+   color: #fafafa;
+
+   display:flex;
 }
 
-#loginDiv form, #signupDiv form {
-  text-align: right;
-  margin-left: 10px;
-  width: 230px;
-}
-#loginDiv form input, #signupDiv form input {
-  margin: 5px 0px;
-}
 
-#loginDiv a, #signupDiv a {
-  margin-left: 30px;
-}
 
-#logout {
-  float: right;
-}
 
-.pref {
-  font-family: 'Open Sans', 'Lucida Sans Unicode';
-  display: inline-block;
-  margin: 5px;
-  margin-right: 15px;
-  padding-right: 5px;
-  padding-left: 3px;
-  width: 125px;
-}
+.splashContainer {
+  background: rgba(0,0,0,0.25);
+  margin-top:60px;
+  padding-bottom:40px;
 
-.pref:hover, a:hover {
-  cursor: pointer;
-  color: black;
-  font-weight: bold;
 }
-
-#tags, #addressesContainer {
-  margin: 0px;
-  margin-bottom: 4px;
-  border: 1px solid #0075C4;
-  border-radius: 7px;
-  padding: 4px;
-  background-color: #0075C4;
+.splashContainer .introText {
+  padding-top: 30px;
+  margin-bottom:20px;
   color: white;
-  padding-left: 15px;
+  font-size:22px;
+  font-weight:400;
 }
 
-#addressesContainer, #optionsView {
-  position: absolute;
-  top: 164px;
-  left: 8px;
-  z-index:100;
+#locationContainer {
+  float:right;
 }
 
-#savePref {
-  float: right;
-}
-
-.invalid {
-  color: red;
-  margin: 5px 0px;
-}
-
-.infoDescription {
-  font-weight: bold;
-}
-
-.blockDisplay {
-  display: block;
-}
-
-.inline {
-  display: inline-block;
-}
-
-.rightSide {
-  font-family: 'Open Sans', 'Lucida Sans Unicode', 'Lucida Grande', sans-serif;
-  margin-top: 5px;
-  float: right;
-  text-align: right;
-  font-size: 1.0em;
-}
-
-.rightSide form {
-  margin-top: 5px;
-}
-
-.rightSide input {
-  margin-right: 6px;
-}
-
-.rightSide div {
-  font-weight: bold;
-}
-
-.loginRedirectText {
-  margin-right: 10px;
-  text-decoration: underline;
-  font-weight: bold;
-}
-
-.loginRedirectText:hover {
-  cursor: pointer;
-  color: #fff;
-}
-
-.rightSide .bold {
-  font-weight: bold;
-  font-size: 18px;
-}
-
-.header h1 {
-  color: white;
-  font-weight: 300;
-  text-shadow: -2px 0 black, 0 2px black, 2px 0 black, 0 -2px black;
-  margin: 0px 15px;
-  padding: 10px 0px;
-  padding-top: 20px;
-  font-size: 3.8em;
-}
-
-.header {
-  color: black;
-  background-color: #0075C4;
-  /*border-left: 15px solid #E6EBE0;*/
-  font-family: 'Modak', 'Lucida Sans Unicode', 'Lucida Grande', sans-serif;
-}
-
-.header button {
-  margin: 90px 8px 0px 0px;
-}
-
-.startEnd {
-  font-size: 14px;
-  font-weight: bold;
-  margin: 0 5px;
-  color: #0075C4;
-}
-
-select {
-  background-color: white;
-  color: #0075C4;
-  border: 2px #0075C4 solid;
-  border-radius: 7px;
-  font-weight: bold;
-}
-
-option {
-
-}
-
-.address {
-  display: inline-block;
-  margin: 4px 0px 4px 15px;
-  width: 175px;
-  border-radius: 7px;
-}
-
-.address:hover {
-  cursor: pointer;
-  color: black;
-}
-
-.addressLabel {
-  font-weight: bold;
-  border-bottom: 1px solid white;
-}
-
-.addressLocation {
-  font-size: 0.75em;
-}
-
-#addAddress fieldset {
-  margin-top: 6px;
-}
-
-#addAddress h4 {
-  margin: 0px 0px 0px 20px;
-}
-
-#addAddress input {
-  margin-right: 20px;
-}
-
-#addAddress input:last-child {
-  margin-left: 15px;
-}
-
-.showDiv {
-  height: 400px;
-  -webkit-transition: all 1s ease;
-}
-.hideDiv {
-  height: 0px;
-  -webkit-transition: all 1s ease;
-}
-
-.small {
-  font-size: 0.8em;
-}
-
-.hoverClick {
-  display: inline-block;
-  height: 100%;
-  vertical-align: top;
-  margin-right: 15px;
-  margin-bottom: 10px;
-  font-weight: bold;
-  color: #0075C4;
-}
-
-.hoverClick:hover {
-  text-decoration: underline;
-  cursor: pointer;
-  color: black;
-}
-
-#tags h4 {
-  margin: 0px 0px 0px 5px;
-}
-
-.textInput {
-  border-width: 2px;
-  border-radius: 7px;
-  border-color: #0075C4;
-  padding-left: 5px;
-}
-
-#optionsBar {
-  display: inline-block;
-  margin-left: 10px;
-}
-
-#addresses, #filter {
-  display: block;
-}
-
-/*** Button Styles ***/
-.btn {
-  height: 20px;
-  width: 80px;
-  color: #0075C4;
-  font-weight: bold;
-  padding-bottom: 15px;
-  border-radius: 7px;
-  display: inline-block;
-  border: 2px solid #0075C4;
-  background-color: white;
-}
-
-.btn:hover {
-  color: white;
-  background-color: #0075C4;
-  border: 2px black solid;
-  cursor: pointer;
-}
-
-/*** Info Window ***/
 .infoWindow {
-	font-size: 14px;
+  max-height: 12em;
 }
 
-.infoWindow .infoName {
-	font-weight: bold;
-	font-size: 18px;
-}
-.infoWindow .restaurantImg {
-	display: inline-block;
-	padding: 10px 10px 5px 0;
-
+#locationIcon {
+  display:inline-block;
 }
 
-.infoWindow .infoLocation {
-	line-height: 1.3em;
-	display: inline-block;
-	vertical-align: bottom;
-	padding-bottom: 5px;
+#locationtext {
+ /*   font-weight:300;*/
+  margin-left: .2em;
+  font-size: 0.8rem;
 }
 
-.infoWindow .infoDescription {
-	padding-top: 10px;
+.restaurantList {
+  overflow-y: scroll;
+  /*height: 100%;*/
+  /*padding: 0;*/
+  /*display: block;*/
 }
+
+.collection {
+  margin: 0;
+}
+
+.restaurantName {
+  font-weight: bold;
+}
+
+#submit {
+  float:right;
+}
+
+.icontext {
+  padding-right: .1em;
+  padding-left: 1.2em;
+}
+
+i.start {
+  border-radius: .6em;
+  margin-right: .1em;
+  position: absolute;
+  margin-top: .1em;
+}
+
+i.cyan-text {
+  margin-top: .2em;
+}
+
+div.scrolling-stop-list {
+  max-height: 15em;
+  overflow-y:auto;
+}
+
+div.form-header {
+  height: 5em;
+}
+
